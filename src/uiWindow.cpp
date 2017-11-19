@@ -761,6 +761,9 @@ void UiWindow::prepScreen()
 #ifdef IVAO
 				+ " IVAO"
 #endif
+#ifdef XFS
+				+ " X-FlightServer.net"
+#endif
 				+ " (Rev. " + xivap.revision() + ")  for " + PLATFORM, true);
 			addText(AL_left, 5, colGreen, SOFTWARE_COPYRIGHT1, true); //splitted the copyrights to fit in the new resized window
 			addText(AL_left, 6, colGreen, SOFTWARE_COPYRIGHT2, true);

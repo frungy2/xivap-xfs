@@ -41,10 +41,10 @@ void ConnectForm::_loadServerList(string filename, bool checkUpdate)
 	string line = "";
 	char l[512];
 	int linesize = 511;
-	#ifdef XFS
-	static bool updateChecked = true;
-	#else
+	#ifdef IVAO
 	static bool updateChecked = false;
+	#else
+	static bool updateChecked = true;
 	#endif
 	// read all lines into our list
 	do {

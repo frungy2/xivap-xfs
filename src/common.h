@@ -101,7 +101,7 @@ inline float ntohf1( const float f )
 //splitted the copyrightlines to fit in the resized window 18/08/2012
 #define SOFTWARE_COPYRIGHT1	"(c)2005-2017 by Martin Domig, Kristof Provost, Andrew McGregor"
 #define	SOFTWARE_COPYRIGHT2	"Thijmen de Gooijer, Kenny Moens, X-AiR Team, XFMC Team"
-#define XFLIGHTSERVER "Xflightserver edition, do no use this version on IVAO or VATSTIM!"
+#define XFLIGHTSERVER "Xflightserver edition, do no use this version on IVAO or VATSIM!"
 
 #ifdef IVAO
 #define UNICOM_NAME       "UNICOM"
@@ -115,7 +115,9 @@ inline float ntohf1( const float f )
 #define UNICOM_DIST		120
 #endif
 
+#ifndef RESOURCES_DIR
 #define RESOURCES_DIR	"X-IvAp Resources"
+#endif
 #define CONFIG_FILE		"X-IvAp.conf"
 #define STATIONS_FILE	"icao.dat"
 #define CMD_LINE_HISTORY_FILE	"cmdLineHistory.txt"

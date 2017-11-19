@@ -37,7 +37,9 @@
 #include "WristWatch.h"
 #include "planeposition.h"
 #include "Tcas.h" //added 16/10/2012
+#ifdef USE_TEAMSPEAK
 #include "TeamSpeak.h"
+#endif
 
 #include <deque>
 

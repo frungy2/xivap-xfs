@@ -16,6 +16,7 @@ code: KLMVA  XFMC Project
 textures: Max XFMC Project
 www.x-fmc.com/
 ****************************************************************************/
+#include "helpers.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -113,13 +114,7 @@ int ERRCHECK(FMOD_RESULT result)
 int InitSound(void)
 {
 	char buffer[200];
-	XPLMGetSystemPath(gPluginDataFileIV);
-	strcat(gPluginDataFileIV, RESOURCES);
-	strcat(gPluginDataFileIV, XPLMGetDirectorySeparator());
-	strcat(gPluginDataFileIV, PLUGINS);
-	strcat(gPluginDataFileIV, XPLMGetDirectorySeparator());
-	strcat(gPluginDataFileIV, RESOURCES_DIR);
-	strcat(gPluginDataFileIV, XPLMGetDirectorySeparator());
+	strcpy(gPluginDataFileIV, pconst(getXivapRessourcesDir()));
 
 	/*        Create a System object and initialize.
 	*/
@@ -134,7 +129,7 @@ int InitSound(void)
 
 	if (version < FMOD_VERSION)
 	{
-		sprintf(buffer,"Dllversion:%d-buildversion%d",version,FMOD_VERSION);
+		sprintf(buffer,"Dllversion:%x-buildversion%x",version,FMOD_VERSION);
 		XPLMDebugString(buffer);
 		XPLMDebugString("SoundInit Error!  You are using an old version of FMOD\r\n");
 		//	return 0;
@@ -496,7 +491,9 @@ int IvaoLoadGLTexture(char *xpFileName, int IvaoTextureId)
 	error = gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB8  , sxWidth, sxHeight, GL_RGB, GL_UNSIGNED_BYTE, ximg); 
 	if (error != 0)
 	{
-		XPLMDebugString("\r\ngluBuild2DMipmaps\r\n");
+		char debug_string[100];
+		sprintf(debug_string, "\r\ngluBuild2DMipmaps, error %s\r\n", gluErrorString(error));
+		XPLMDebugString(debug_string);
 		return FALSE;
 	}
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

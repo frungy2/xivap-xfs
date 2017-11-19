@@ -26,7 +26,6 @@
 #define TEAMSPEAK_H
 
 #include "common.h"
-#ifdef IVAO
 #ifdef WIN32
 #define HAVE_TEAMSPEAK
 #endif
@@ -37,7 +36,6 @@
 
 #ifdef LINUX
 #define HAVE_TEAMSPEAK
-#endif
 #endif
 class TeamSpeak 
 {

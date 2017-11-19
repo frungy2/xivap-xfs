@@ -1,0 +1,3 @@
+[submodule "libxplanemp"]
+	path = libxplanemp
+	url = https://github.com/frungy2/libxplanemp-xfs

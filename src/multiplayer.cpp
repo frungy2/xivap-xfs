@@ -154,7 +154,8 @@ _initialized(false), _enabled(false)
 
 MultiplayerEngine::~MultiplayerEngine()
 {
-	XPMPMultiplayerDeinit();
+	XPMPMultiplayerDisable();
+	XPMPMultiplayerCleanup();
 
 	_mp_engine = NULL;
 	clear();
@@ -189,19 +190,39 @@ bool MultiplayerEngine::init(bool enablep2p, int maxsendBps, int maxrecvBps, int
 	if(_initialized) return true;
 	_defaultIcao = defaultICAO;
 
-	string result = XPMPMultiplayerInit(
-			getXivapRessourcesDir(),
-			getMachRessourcesDir() + "CSL",
-			getXivapRessourcesDir() + "related.txt",
-			getXivapRessourcesDir() + "lights.png",
-			getXivapRessourcesDir() + "Doc8643.txt",
-			_defaultIcao, IntPrefs, FloatPrefs);
+	string result = XPMPMultiplayerInit(&IntPrefs, &FloatPrefs, getXivapRessourcesDir());
 			
 	if(length(result) > 0) {
 		_errorMessage = "'" + result + "'";
 		return false;
 	}
 	
+	result = XPMPLoadCSLPackage(getXivapRessourcesDir() + "CSL8", getXivapRessourcesDir() + "related.txt", getXivapRessourcesDir() + "Doc8643.txt");
+	if (length(result) > 0) {
+		_errorMessage = "'" + result + "'";
+		return false;
+	}
+
+	result = XPMPLoadCSLPackage(getXivapRessourcesDir() + "CSL", getXivapRessourcesDir() + "related.txt", getXivapRessourcesDir() + "Doc8643.txt");
+	if (length(result) > 0) {
+		_errorMessage = "'" + result + "'";
+		return false;
+	}
+
+	XPMPSetDefaultPlaneICAO(_defaultIcao);
+
+	result = XPMPMultiplayerOBJ7SupportEnable(getXivapRessourcesDir() + "lights.png");
+	if (length(result) > 0) {
+		_errorMessage = "'" + result + "'";
+		return false;
+	}
+
+	result = XPMPMultiplayerEnable();
+	if (length(result) > 0) {
+		_errorMessage = "'" + result + "'";
+		return false;
+	}
+
 	p2penabled = enablep2p;
 	p2psendbps = maxsendBps;
 	p2precvbps = maxrecvBps;
@@ -297,6 +318,7 @@ void Multiplayer::MultiplayerEngine::removeDebugModel() {
 	// #drawtest
 	if (gTestPlaneId)
 		XPMPDestroyPlane(gTestPlaneId);
+	gTestPlaneId = NULL;
 }
 
 //plane update is a callback from multiplayer engine

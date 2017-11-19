@@ -380,9 +380,6 @@ bool TeamSpeak::Quit()
 #ifdef WIN32
 	// dll not loaded, so return false
 	if(!dll_loaded_) return false;
-#ifdef XFS
-	xivap._tsQuit = true;
-#endif
 	// quit now
 	xivap._tsQuit = true;
 	return tsrQuit() == 0;

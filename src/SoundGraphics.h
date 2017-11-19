@@ -28,7 +28,6 @@ void CloseGauge(void);
 
 #define RESOURCES		"Resources" 
 #define PLUGINS			"plugins"
-#define RESOURCES_DIR	"X-IvAp Resources"
 #define SOUND_DIR		"sound"
 #define TEXTURE_DIR		"textures"
 #define PANEL_FILENAMEDAY	"xivap.png" 

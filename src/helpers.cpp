@@ -112,7 +112,8 @@ string strupcase(string line)
 string getXplaneHomeDir(void)
 {
 
-	const char* app = GetApplicationPath();
+	char app[512];
+	XPLMGetSystemPath(app);
 	string result=("");
 	static bool firsttime = true;
 	

@@ -26,7 +26,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "SoundGraphics.h"
 #include "XPLMPlanes.h"
-#include "PlatformUtils.h"
 
 #include "fsdmessage.h"
 
@@ -1599,7 +1598,7 @@ void Xivap::flightLoopCallback()
     int numAircraft, numActive;
     XPLMPluginID pluginId;
     XPLMCountAircraft(&numAircraft, &numActive, &pluginId);
-    if (numAircraft < 4) {
+    if (numAircraft < 1) {
       uiWindow.addMessage(colYellow, "Warning: TCAS will show " + itostring(numAircraft) + " targets only");
       messageBox().show("Warning: TCAS will show " + itostring(numAircraft) + " targets only. If you need more, increase the number of airplanes in the rendering settings.");
     }

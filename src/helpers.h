@@ -13,10 +13,11 @@
  ***************************************************************************/
 
 #include "common.h"
-#include "PlatformUtils.h"
 
 /** Convert double to string */
 string ftoa(double d);
+
+#define DIR_CHAR XPLMGetDirectorySeparator()[0]
 
 #define PI 3.14159265359
 

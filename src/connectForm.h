@@ -16,7 +16,9 @@
 #define CONNECT_FORM_
 
 #include "common.h"
+#ifdef USE_TEAMSPEAK
 #include "TeamSpeak.h"
+#endif
 
 class ConnectForm {
 public:

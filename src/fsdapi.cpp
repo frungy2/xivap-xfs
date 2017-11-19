@@ -17,7 +17,9 @@
 #include "xivap.h"
 #include "configFile.h"
 
-//#define FSDAPI_DUMP_COMMUNICATION
+#ifdef DEBUG_COMMS
+#define FSDAPI_DUMP_COMMUNICATION
+#endif
 //#define IVAO
 
 Flightplan::Flightplan():
@@ -188,7 +190,7 @@ FsdAPI::FsdAPI()
 {
 
 	_connected = false;
-#ifdef XFS
+#ifndef IVAO
 	_verified = true;                                                                                                           
 #endif
 	_realname = _id = _callsign = _host = _mypublicip = _password = "";
@@ -264,11 +266,10 @@ void FsdAPI::connectPilot(string host, string port, string callsign, string id, 
 		return;
 
 	_socket.open(host, port);
-
 	_connected = true;
-	#ifdef XFS
+#ifdef XFS
 	_verified = true;
-	#endif // XFS
+#endif
 	callsign = trim(strupcase(callsign));
 
 	// source dest vid pass rating/hideadm revision simulator realname
@@ -423,7 +424,7 @@ void FsdAPI::regInfo(const FSD::Message& m)
 {
 //removed on request of IVAO
 
-#ifdef XFS
+#ifndef IVAO
 	_verified = true;
 #endif
 }
@@ -449,7 +450,7 @@ bool FsdAPI::send(FSD::Message &msg, bool colon_check)
 	if(length(line) > 0 && length(line) < MAX_FSD_PACKETLEN) {
 		_socket.writeln(line);
 #ifdef FSDAPI_DUMP_COMMUNICATION
-		xivap.addText(colLightGray, line);
+		xivap.addText(colLightGray, line, true, true);
 #endif
 		return true;
 	}
@@ -564,7 +565,7 @@ void FsdAPI::disconnectPilot()
 	_socket.writeln(packet);
 	_socket.close();
 	_connected = false;
-#ifdef XFS
+#ifndef IVAO
 	_verified = true;
 #else
 	_verified = false;
