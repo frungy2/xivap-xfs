@@ -20,7 +20,8 @@ www.x-fmc.com/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "stb_image_aug.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #include "XPLMDisplay.h"
 #include "XPLMGraphics.h"
 #include "XPLMDataAccess.h"

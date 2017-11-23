@@ -102,7 +102,6 @@ add_library(xivap SHARED
 	src/planeposition.cpp
 	src/refInspector.cpp
 	src/SoundGraphics.cpp
-	src/stb_image_aug.cpp
 	src/systemcallbacks.cpp
 	src/Tcas.cpp
 	src/tcpsocket.cpp
