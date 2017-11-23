@@ -85,7 +85,7 @@ add_library(xivap SHARED
 	src/configFile.cpp
 	src/connectForm.cpp
 	src/disconnectForm.cpp
-	src/FlightLogger.cpp
+	#src/FlightLogger.cpp #Nothing seems to be using this
 	src/flightplanForm.cpp
 	src/FMCform.cpp
 	src/fsdapi.cpp
