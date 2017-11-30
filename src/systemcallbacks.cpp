@@ -91,9 +91,6 @@ using namespace xivap_cmd;
 /* ************ snagar - END Commands ******************************** */
 PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc)
 {
-#if APL
-	XPLMEnableFeature("XPLM_USE_NATIVE_PATHS",1); //for native path MacOs
-#endif
 #ifdef INTERNAL_BETA
 	if(!xivap.betaBlocker.CheckDate())
 		return 0;

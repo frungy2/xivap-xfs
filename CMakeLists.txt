@@ -18,12 +18,14 @@ add_library(fmod SHARED IMPORTED)
 
 set(XIVAP_EXTRA_LINK_FLAGS "")
 set(XIVAP_PLATFORM_SOURCES "")
+set(XIVAP_LEGACY_NAME "")
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 	set(XIVAP_INCLUDE_DIRS ${XIVAP_INCLUDE_DIRS} includes/FMOD/FMODLinux/api/inc)
 	set_property(TARGET fmod PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/includes/FMOD/FMODLinux/api/lib/libfmod.so)
 	set(XIVAP_DEFINES ${XIVAP_DEFINES} LIN=1 LINUX=1)
 	set(XIVAP_PLATFORM_PLUGIN_DIR lin_x64)
 	set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-Wl,--version-script=\"${CMAKE_SOURCE_DIR}/includes/linker.script\"")
+	set(XIVAP_LEGACY_NAME "lin")
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(XIVAP_INCLUDE_DIRS ${XIVAP_INCLUDE_DIRS} includes/FMOD/FMODWindows/api/inc)
 	include_directories(PUBLIC includes/WinIncludes includes/WinIncludes/GL ${PNG_INCLUDE_DIRS})
@@ -34,11 +36,15 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(XIVAP_PLATFORM_PLUGIN_DIR win_x64)
 	set(XIVAP_EXTRA_LINK_FLAGS -NODEFAULTLIB:libcmt)
 	set(XIVAP_PLATFORM_SOURCES ${XIVAP_PLATFORM_SOURCES} src/xivapWin.cpp)
+	set(XIVAP_LEGACY_NAME "win")
 elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	find_library(FRAMEWORK_FOUNDATION Foundation )
+	set(XIVAP_LINK_LIBRARIES ${XIVAP_LINK_LIBRARIES} ${FRAMEWORK_FOUNDATION})
 	set(XIVAP_INCLUDE_DIRS ${XIVAP_INCLUDE_DIRS} includes/FMOD/FMODMac/api/inc)
 	set_property(TARGET fmod PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/includes/FMOD/FMODMac/api/lib/libfmod.dylib)
 	set(XIVAP_DEFINES ${XIVAP_DEFINES} APL=1 APPLE=1)
 	set(XIVAP_PLATFORM_PLUGIN_DIR mac_x64)
+	set(XIVAP_LEGACY_NAME "mac")
 endif()
 
 add_subdirectory(ptypes)
@@ -47,6 +53,7 @@ set(XIVAP_PLUGIN_NAME "X-IvAp")
 
 option(IVAOBUILD "Build for IVAO" OFF)
 option(XFSBUILD "Build for XFS" ON)
+option(LEGACY_BUILD_MODE "Build without using XPLM300 API" OFF)
 
 CMAKE_DEPENDENT_OPTION(USE_TEAMSPEAK "Build teamspeak support" ON "IVAOBUILD" OFF)
 
@@ -65,7 +72,13 @@ if(XFSBUILD)
 	set(XIVAP_PLUGIN_NAME "X-FlightServer")
 endif()
 
-add_definitions(-DXPLM300=1)
+if(NOT LEGACY_BUILD_MODE)
+	add_definitions(-DXPLM300=1)
+	set(XIVAP_PLUGIN_FILE_NAME ${XIVAP_PLUGIN_NAME})
+else()
+	set(XIVAP_PLUGIN_FILE_NAME ${XIVAP_LEGACY_NAME})
+	set(XIVAP_PLATFORM_PLUGIN_DIR 64)
+endif()
 
 add_subdirectory(libxplanemp)
 set_property(TARGET xplanemp PROPERTY POSITION_INDEPENDENT_CODE ON)
@@ -145,7 +158,7 @@ target_compile_definitions(xivap PRIVATE ${XIVAP_DEFINES})
 
 set_target_properties(xivap PROPERTIES SUFFIX .xpl)
 set_target_properties(xivap PROPERTIES PREFIX "")
-set_target_properties(xivap PROPERTIES OUTPUT_NAME ${XIVAP_PLUGIN_NAME})
+set_target_properties(xivap PROPERTIES OUTPUT_NAME ${XIVAP_PLUGIN_FILE_NAME})
 set_property(TARGET xivap PROPERTY CXX_STANDARD_REQUIRED 11)
 set_property(TARGET xivap PROPERTY CXX_STANDARD 14)
 
@@ -180,6 +193,19 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 add_custom_command(TARGET xivap POST_BUILD
 COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/includes/FMOD/FMODLinux/api/lib/libfmod.so.9" "${CMAKE_BINARY_DIR}/${XIVAP_PLUGIN_NAME}/${XIVAP_PLATFORM_PLUGIN_DIR}/libfmod.so.9"
 )
+endif()
+
+if(LEGACY_BUILD_MODE)
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+add_custom_command(TARGET xivap POST_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/includes/FMOD/FMODWindows/api/lib/fmod64.dll" "${CMAKE_BINARY_DIR}/${XIVAP_PLUGIN_NAME}/${XIVAP_PLATFORM_PLUGIN_DIR}/fmod64.dll"
+)
+endif()
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+add_custom_command(TARGET xivap POST_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/includes/FMOD/FMODMac/api/lib/libfmod.dylib" "${CMAKE_BINARY_DIR}/${XIVAP_PLUGIN_NAME}/${XIVAP_PLATFORM_PLUGIN_DIR}/libfmod.dylib"
+)
+endif()
 endif()
 
 #Copy over the teamspeak dll only if required

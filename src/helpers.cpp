@@ -116,6 +116,12 @@ string getXplaneHomeDir(void)
 	XPLMGetSystemPath(app);
 	string result=("");
 	static bool firsttime = true;
+	if (firsttime) {
+#if APL
+		XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1); //for native path MacOs
+#endif
+		firsttime = false;
+	}
 	
 	if(app != NULL) {
 		string path = string(app);

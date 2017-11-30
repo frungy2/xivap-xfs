@@ -31,8 +31,6 @@
 
 #include "udp.h"
 
-using namespace std;
-
 
 Socket
 openPort( unsigned short port, unsigned int interfaceIp, bool verbose )
@@ -43,7 +41,7 @@ openPort( unsigned short port, unsigned int interfaceIp, bool verbose )
    if ( fd == INVALID_SOCKET )
    {
       int err = getErrno();
-      cerr << "Could not create a UDP socket:" << err << endl;
+      std::cerr << "Could not create a UDP socket:" << err << std::endl;
       return INVALID_SOCKET;
    }
     
@@ -59,8 +57,8 @@ openPort( unsigned short port, unsigned int interfaceIp, bool verbose )
       addr.sin_addr.s_addr = htonl(interfaceIp);
       if (verbose )
       {
-         clog << "Binding to interface " 
-              << hex << "0x" << htonl(interfaceIp) << dec << endl;
+         std::clog << "Binding to interface " 
+              << std::hex << "0x" << htonl(interfaceIp) << std::dec << std::endl;
       }
    }
 	
@@ -72,12 +70,12 @@ openPort( unsigned short port, unsigned int interfaceIp, bool verbose )
       {
          case 0:
          {
-            cerr << "Could not bind socket" << endl;
+            std::cerr << "Could not bind socket" << std::endl;
             return INVALID_SOCKET;
          }
          case EADDRINUSE:
          {
-            cerr << "Port " << port << " for receiving UDP is in use" << endl;
+            std::cerr << "Port " << port << " for receiving UDP is in use" << std::endl;
             return INVALID_SOCKET;
          }
          break;
@@ -85,15 +83,15 @@ openPort( unsigned short port, unsigned int interfaceIp, bool verbose )
          {
             if ( verbose ) 
             {
-               cerr << "Cannot assign requested address" << endl;
+               std::cerr << "Cannot assign requested address" << std::endl;
             }
             return INVALID_SOCKET;
          }
          break;
          default:
          {
-            cerr << "Could not bind UDP receive port"
-                 << "Error=" << e << " " << strerror(e) << endl;
+            std::cerr << "Could not bind UDP receive port"
+                 << "Error=" << e << " " << strerror(e) << std::endl;
             return INVALID_SOCKET;
          }
          break;
@@ -101,7 +99,7 @@ openPort( unsigned short port, unsigned int interfaceIp, bool verbose )
    }
    if ( verbose )
    {
-      clog << "Opened port " << port << " with fd " << fd << endl;
+      std::clog << "Opened port " << port << " with fd " << fd << std::endl;
    }
    
    assert( fd != INVALID_SOCKET  );
@@ -137,14 +135,14 @@ getMessage( Socket fd, char* buf, int* len,
       switch (err)
       {
          case ENOTSOCK:
-            cerr << "Error fd not a socket" <<   endl;
+            std::cerr << "Error fd not a socket" << std::endl;
             break;
          case ECONNRESET:
-            cerr << "Error connection reset - host not reachable" <<   endl;
+			 std::cerr << "Error connection reset - host not reachable" << std::endl;
             break;
 				
          default:
-            cerr << "Socket Error=" << err << endl;
+			 std::cerr << "Socket Error=" << err << std::endl;
       }
 		
       return false;
@@ -152,13 +150,13 @@ getMessage( Socket fd, char* buf, int* len,
 	
    if ( *len < 0 )
    {
-      clog << "socket closed? negative len" << endl;
+	   std::clog << "socket closed? negative len" << std::endl;
       return false;
    }
     
    if ( *len == 0 )
    {
-      clog << "socket closed? zero len" << endl;
+	   std::clog << "socket closed? zero len" << std::endl;
       return false;
    }
     
@@ -169,7 +167,7 @@ getMessage( Socket fd, char* buf, int* len,
    {
       if (verbose)
       {
-         clog << "Received a message that was too large" << endl;
+		  std::clog << "Received a message that was too large" << std::endl;
       }
       return false;
    }
@@ -224,12 +222,12 @@ sendMessage( Socket fd, char* buf, int l,
          break;
          case EAFNOSUPPORT:
          {
-            cerr << "err EAFNOSUPPORT in send" << endl;
+			 std::cerr << "err EAFNOSUPPORT in send" << std::endl;
          }
          break;
          default:
          {
-            cerr << "err " << e << " "  << strerror(e) << " in send" << endl;
+			 std::cerr << "err " << e << " "  << strerror(e) << " in send" << std::endl;
          }
       }
       return false;
@@ -237,7 +235,7 @@ sendMessage( Socket fd, char* buf, int l,
     
    if ( s == 0 )
    {
-      cerr << "no data sent in send" << endl;
+	   std::cerr << "no data sent in send" << std::endl;
       return false;
    }
     
@@ -245,7 +243,7 @@ sendMessage( Socket fd, char* buf, int l,
    {
       if (verbose)
       {
-         cerr << "only " << s << " out of " << l << " bytes sent" << endl;
+		  std::cerr << "only " << s << " out of " << l << " bytes sent" << std::endl;
       }
       return false;
    }
@@ -266,7 +264,7 @@ initNetwork()
    if ( err != 0 ) 
    {
       // could not find a usable WinSock DLL
-      cerr << "Could not load winsock" << endl;
+	   std::cerr << "Could not load winsock" << std::endl;
       assert(0); // is this is failing, try a different version that 2.2, 1.0 or later will likely work 
       exit(1);
    }
@@ -283,7 +281,7 @@ initNetwork()
       /* Tell the user that we could not find a usable */
       /* WinSock DLL.                                  */
       WSACleanup( );
-      cerr << "Bad winsock verion" << endl;
+	  std::cerr << "Bad winsock verion" << std::endl;
       assert(0); // is this is failing, try a different version that 2.2, 1.0 or later will likely work 
       exit(1);
    }    
