@@ -111,10 +111,6 @@ string strupcase(string line)
 
 string getXplaneHomeDir(void)
 {
-
-	char app[512];
-	XPLMGetSystemPath(app);
-	string result=("");
 	static bool firsttime = true;
 	if (firsttime) {
 #if APL
@@ -122,6 +118,10 @@ string getXplaneHomeDir(void)
 #endif
 		firsttime = false;
 	}
+	char app[512];
+	XPLMGetSystemPath(app);
+	string result=("");
+	
 	
 	if(app != NULL) {
 		string path = string(app);
