@@ -114,7 +114,10 @@ string getXplaneHomeDir(void)
 	static bool firsttime = true;
 	if (firsttime) {
 #if APL
-		XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1); //for native path MacOs
+		if (XPLMIsFeatureEnabled("XPLM_USE_NATIVE_PATHS") == 0)
+		{
+			XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1); //for native path MacOs
+		}
 #endif
 		firsttime = false;
 	}

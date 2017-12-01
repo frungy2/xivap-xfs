@@ -215,6 +215,12 @@ PLUGIN_API void XPluginDisable(void)
 
 PLUGIN_API int XPluginEnable(void)
 {
+#if APL
+	if (XPLMIsFeatureEnabled("XPLM_USE_NATIVE_PATHS") == 0)
+	{
+		XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1); //for native path MacOs
+	}
+#endif
 #ifdef BETA
 	if(!xivap.betaBlocker.CheckDate())
 		return 0;
