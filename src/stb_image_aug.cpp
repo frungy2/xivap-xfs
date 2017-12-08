@@ -3383,7 +3383,7 @@ main_decode_loop:
 				if (c1 != 2 || c2 != 2 || (len & 0x80)) {
 					// not run-length encoded, so we have to actually use THIS data as a decoded
 					// pixel (note this can't be a valid pixel--one of RGB must be >= 128)
-					stbi_uc rgbe[4] = { c1,c2,len, get8(s) };
+					stbi_uc rgbe[4] = { (stbi_uc) c1, (stbi_uc)c2, (stbi_uc)len, (stbi_uc) get8(s) }; //casting for macos 6/12/2017  bvk
 					hdr_convert(hdr_data, rgbe, req_comp);
 					i = 1;
 					j = 0;
