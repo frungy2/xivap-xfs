@@ -64,7 +64,7 @@ www.x-fmc.com/
 //1.04 15-10-2012 first attemt to build a extern tcasbox
 //1.05 2-01-2013 integration in x64 system
 //1.06	6-05-2017  update fmod version for x11
-
+//1.07 03-12-2017 changed directive for macOS xcode 8 build
 
 
 char gPluginDataFileIV[255];
@@ -77,7 +77,7 @@ XPLMTextureID IvaoTexture[30]; //maxtexture
 int	Ui_width, Ui_height;
 int	xPanelWindowLeft, xPanelWindowBottom;
 char Graphics = 0;
-#ifdef IBM
+#if IBM
 static HANDLE gConsoleHandle = NULL;
 #endif
 XPLMDataRef	RED = NULL, GREEN = NULL, BLUE = NULL;
@@ -119,7 +119,7 @@ int InitSound(void)
 
 	/*        Create a System object and initialize.
 	*/
-#ifdef IBM
+#if IBM
 	gConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 #endif
 
