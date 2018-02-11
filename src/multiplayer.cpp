@@ -1178,6 +1178,15 @@ void MultiplayerEngine::ProcessPPOS1Pos(MultiplayerPilot *pilot, const char *buf
 	// packet is older than the last one received (messed up packet sequence)
 	if(timestamp <= pilot->p2plastpostime_t)
 		return;
+
+	// bad coords
+	if (isnan(packet_lat)) 
+		packet_lat = 0.0f;
+	if (isnan(packet_lon))
+		packet_lon = 0.0f;
+	if (isnan(packet_alt))
+		packet_alt = 0.0f;
+
 	
     UInt32 now_ = xivap.watch.getTime();
 

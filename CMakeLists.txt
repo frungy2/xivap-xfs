@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.7" CACHE STRING "Minimum OS X deployment version")
 
 project(xivap LANGUAGES C CXX)
 set(XPSDK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/includes/XPSDK")
