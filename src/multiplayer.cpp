@@ -1180,11 +1180,11 @@ void MultiplayerEngine::ProcessPPOS1Pos(MultiplayerPilot *pilot, const char *buf
 		return;
 
 	// bad coords
-	if (isnan(packet_lat)) 
+	if (std::isnan(packet_lat)) 
 		packet_lat = 0.0f;
-	if (isnan(packet_lon))
+	if (std::isnan(packet_lon))
 		packet_lon = 0.0f;
-	if (isnan(packet_alt))
+	if (std::isnan(packet_alt))
 		packet_alt = 0.0f;
 
 	
