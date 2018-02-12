@@ -17,9 +17,9 @@
 #include "helpers.h"
 #include "TLVpacket.h"
 
-#include <math.h>
 #include <algorithm>
 #include <sstream>
+#include <cmath>
 
 #ifdef __ppc__
 #include <Endian.h>
